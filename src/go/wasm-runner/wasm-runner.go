@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/bytecodealliance/wasmtime-go"
+	"github.com/bytecodealliance/wasmtime-go/v40"
 )
 
 func add(a int32, b int32) int32 {
@@ -16,7 +16,7 @@ func RunWasm() {
 	// Configure the initial compilation environment.
 	engine := wasmtime.NewEngine()
 
-	module, err := wasmtime.NewModuleFromFile(engine, "../../target/wasm32-wasi/release/wasm.wasm")
+	module, err := wasmtime.NewModuleFromFile(engine, "../../target/wasm32-wasip1/release/wasm.wasm")
 	if err != nil {
 		log.Fatal(err)
 	}
