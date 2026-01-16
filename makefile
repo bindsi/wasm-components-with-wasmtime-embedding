@@ -8,13 +8,13 @@ go: build_module_release build_go_host_release run_go_host
 build_component_release:
 	cargo component build --release --manifest-path components/transformer/Cargo.toml && \
 	cargo component build --release --manifest-path components/range_validator/Cargo.toml && \
-	wasm-tools component wit target/wasm32-wasi/release/transformer.wasm && \
-	wasm-tools component wit target/wasm32-wasi/release/rangevalidator.wasm && \
-	wasm-tools compose target/wasm32-wasi/release/transformer.wasm -d target/wasm32-wasi/release/rangevalidator.wasm -o target/wasm32-wasi/release/composedtransformer.wasm
+	wasm-tools component wit target/wasm32-wasip1/release/transformer.wasm && \
+	wasm-tools component wit target/wasm32-wasip1/release/rangevalidator.wasm && \
+	wasm-tools compose target/wasm32-wasip1/release/transformer.wasm -d target/wasm32-wasip1/release/rangevalidator.wasm -o target/wasm32-wasip1/release/composedtransformer.wasm
 
 .PHONY: build_module_release
 build_module_release:
-	cargo build --release --target wasm32-wasi --manifest-path modules/wasm/Cargo.toml
+	cargo build --release --target wasm32-wasip1 --manifest-path modules/wasm/Cargo.toml
 
 .PHONY: build_host_release
 build_host_release:

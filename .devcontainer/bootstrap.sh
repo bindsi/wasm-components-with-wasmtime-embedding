@@ -1,5 +1,5 @@
-# Installs Rust's wasm32-wasi target for building WebAssembly components.
-rustup target add wasm32-wasi
+# Installs Rust's wasm32-wasip1 target for building WebAssembly components.
+rustup target add wasm32-wasip1
 
 # Installs Wasmtime, a WebAssembly runtime.
 # TODO: Add wasmtime binary to path so it can be used in the terminal without opening a new one.

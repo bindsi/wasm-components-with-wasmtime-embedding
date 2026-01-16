@@ -1,23 +1,23 @@
-use wasmtime_wasi::preview2;
+use wasmtime_wasi;
 // https://docs.rs/wasmtime/latest/wasmtime/component/macro.bindgen.html
 use anyhow::Ok;
 use wasmtime::component::*;
 use wasmtime::{Config, Engine, Store};
-use wasmtime_wasi::preview2::{Table, WasiCtx, WasiCtxBuilder, WasiView};
+use wasmtime_wasi::{ResourceTable, WasiCtx, WasiCtxBuilder, WasiView};
 
 bindgen!();
 
 // Imports into the world, like the `name` import for this world, are satisfied
 // through traits.
 impl data::transformer::message_transformers::Host for ServerWasiView {
-    fn convert_to_psi(&mut self, bar: f32) -> std::result::Result<f32, anyhow::Error> {
+    fn convert_to_psi(&mut self, bar: f32) -> f32 {
         // Convert Bar to PSI
-        Ok(bar * 14.5038)
+        bar * 14.5038
     }
 
-    fn convert_to_bar(&mut self, psi: f32) -> std::result::Result<f32, anyhow::Error> {
+    fn convert_to_bar(&mut self, psi: f32) -> f32 {
         // Convert PSI to Bar
-        Ok(psi * 14.5038)
+        psi * 14.5038
     }
 }
 
@@ -29,7 +29,7 @@ fn main() -> wasmtime::Result<()> {
     // config.async_support(true);
 
     let engine = Engine::new(&config)?;
-    let component = Component::from_file(&engine, "target/wasm32-wasi/release/composedtransformer.wasm")?;
+    let component = Component::from_file(&engine, "target/wasm32-wasip1/release/composedtransformer.wasm")?;
 
     // Instantiation of bindings always happens through a `Linker`.
     // Configuration of the linker is done through a generated `add_to_linker`
@@ -50,7 +50,7 @@ fn main() -> wasmtime::Result<()> {
     let wasi_view = ServerWasiView::new();
     let mut store = Store::new(&engine, wasi_view);
 
-    let (bindings, _) = Transformer::instantiate(&mut store, &component, &linker)?;
+    let bindings = Transformer::instantiate(&mut store, &component, &linker)?;
     let output = bindings.interface0.call_run(&mut store, "")?;
 
     println!("OUTPUT: {output}");
@@ -58,13 +58,13 @@ fn main() -> wasmtime::Result<()> {
     Ok(())
 }
 struct ServerWasiView {
-    table: Table,
+    table: ResourceTable,
     ctx: WasiCtx,
 }
 
 impl ServerWasiView {
     fn new() -> Self {
-        let table = Table::new();
+        let table = ResourceTable::new();
         let ctx = WasiCtxBuilder::new().inherit_stdio().build();
 
         Self { table, ctx }
@@ -72,19 +72,11 @@ impl ServerWasiView {
 }
 
 impl WasiView for ServerWasiView {
-    fn table(&self) -> &Table {
-        &self.table
-    }
-
-    fn table_mut(&mut self) -> &mut Table {
+    fn table(&mut self) -> &mut ResourceTable {
         &mut self.table
     }
 
-    fn ctx(&self) -> &WasiCtx {
-        &self.ctx
-    }
-
-    fn ctx_mut(&mut self) -> &mut WasiCtx {
+    fn ctx(&mut self) -> &mut WasiCtx {
         &mut self.ctx
     }
 }

@@ -3,16 +3,18 @@
 wit_bindgen::generate!({
     path: "",
     world: "transformer",
-    exports: {
-        world: Module,
-    },
+    // exports: {
+    //     world: Module,
+    // },
 });
 
 struct Module;
 
 impl Guest for Module {
     fn run(a: i32, b: i32) -> i32 {
-        let retVal: i32 = add(a, b);
-        return retVal;
+        let ret_val: i32 = add(a, b);
+        return ret_val;
     }
 }
+
+export!(Module);
