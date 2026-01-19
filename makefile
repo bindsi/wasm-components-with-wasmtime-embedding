@@ -16,10 +16,6 @@ build_component_release:
 build_module_release:
 	cargo build --release --target wasm32-wasip1 --manifest-path modules/wasm/Cargo.toml
 
-.PHONY: build_module_release
-build_module_release:
-	cargo build --release --target wasm32-wasi --manifest-path modules/wasm/Cargo.toml
-
 .PHONY: build_host_release
 build_host_release:
 	cargo build --release
