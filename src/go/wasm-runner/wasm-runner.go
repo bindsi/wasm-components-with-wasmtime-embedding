@@ -16,7 +16,7 @@ func RunWasm() {
 	// Configure the initial compilation environment.
 	engine := wasmtime.NewEngine()
 
-	module, err := wasmtime.NewModuleFromFile(engine, "../../target/wasm32-wasip1/release/wasm.wasm")
+	module, err := wasmtime.NewModuleFromFile(engine, "../../target/wasm32-wasip1/release/wasm_component.wasm")
 	if err != nil {
 		log.Fatal(err)
 	}

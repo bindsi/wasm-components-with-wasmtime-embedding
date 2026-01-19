@@ -1,4 +1,5 @@
-cargo_component_bindings::generate!();
+#[allow(warnings)]
+mod bindings;
 
 use bindings::exports::data::transformer::component_runner::Guest;
 
@@ -26,3 +27,5 @@ impl Guest for Component {
         }
     }
 }
+
+bindings::export!(Component with_types_in bindings);

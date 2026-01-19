@@ -1,4 +1,5 @@
-cargo_component_bindings::generate!();
+#[allow(warnings)]
+mod bindings;
 
 use bindings::exports::data::validator::unit_validator::Guest;
 
@@ -14,3 +15,5 @@ impl Guest for Component {
         (0.0..=50.0).contains(&val)
     }
 }
+
+bindings::export!(Component with_types_in bindings);
